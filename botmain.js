@@ -43,6 +43,23 @@ client.once("ready", async () => {
     console.log("Ready!");
 });
 
+const mongodb = require('mongodb')
+const MongoClient = mongodb.MongoClient
+const assert = require('assert')
+
+MongoClient.connect(config.mongodb, (err, db) => {
+    assert.equal(null, err)
+    console.log("Connected successfully to MongoDB")
+    const dbName = db.db("TestDatabese");
+    dbName.collection("test_data").find().toArray(function(err, res) {
+        if (err) throw err;
+        console.log(res.at(0).name);
+        db.close();
+    })
+
+
+})
+
 /*実際の動作*/
 client.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) {
